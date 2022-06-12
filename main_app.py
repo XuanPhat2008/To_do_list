@@ -311,7 +311,11 @@ for task, date, done, type_of_mission in zip(my_to_do_list['Name'], my_to_do_lis
 		line = lines[3]
 		button1 = buttons1_color[3]
 		button2 = buttons2_color[3]
-
+	
+	to_do_list_line = Image.open(line)
+	to_do_list_line = to_do_list_line.resize((20, 70), Image.ANTIALIAS)
+	bar2 = ImageTk.PhotoImage(to_do_list_line)
+	
 	to_do_list_button1 = Image.open(button1)
 	to_do_list_button1 = to_do_list_button1.resize((30, 30), Image.ANTIALIAS)
 	but1 = ImageTk.PhotoImage(to_do_list_button1)
