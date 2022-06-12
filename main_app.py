@@ -147,6 +147,18 @@ check_what_you_have_done.bind('<Enter>', cwyhdHover)
 check_what_you_have_done.bind('<Leave>', cwyhdHover)
 
 
+# Dash-line ngăn cách 1 - [của frame 2 - Dòng 1]
+dash_line1 = Image.open('Resource/dash_line.png')
+dash_line1 = dash_line1.resize((500, 20), Image.ANTIALIAS)
+dash1 = ImageTk.PhotoImage(dash_line1)
+Label(main, image = dash1, highlightthickness = 0, bd = 0).place(x=300, y=93)
+
+# Dash-line ngăn cách 2 - [của frame 2 - Dòng 1]
+dash_line2 = Image.open('Resource/dash_line.png')
+dash_line2 = dash_line2.resize((500, 20), Image.ANTIALIAS)
+dash2 = ImageTk.PhotoImage(dash_line2)
+Label(main, image = dash2, highlightthickness = 0, bd = 0).place(x=300, y=439)
+
 
 #tạo frame thứ 3: Chân
 last_frame = Frame(main, bg = "#404040", width = 800, height = 150)
@@ -263,40 +275,42 @@ image_index = 0
 add = 17
 for task, date, done in zip(my_to_do_list['Name'], my_to_do_list['Deadline'], my_to_do_list['Done']):	
 
-	color = random.choice(colors)
+	# xác định loại màu mà các objects trong khung sẽ được định dạng
+	# màu đỏ là: Skill
+	if type_of_mission == "skill":
+		color = colors[1]
+		to_do_list = Image.open(color)
+		to_do_list = to_do_list.resize((250, 70), Image.ANTIALIAS)
+		bar = ImageTk.PhotoImage(to_do_list)
 
-	to_do_list = Image.open(color)
-	to_do_list = to_do_list.resize((250, 70), Image.ANTIALIAS)
-	bar = ImageTk.PhotoImage(to_do_list)
-
-	if color == colors[0]:
-		color = colors_hex[0]
-		line = lines[0]
-		button1 = buttons1_color[0]
-		button2 = buttons2_color[0]
-
-	elif color == colors[1]:
 		color = colors_hex[1]
 		line = lines[1]
 		button1 = buttons1_color[1]
 		button2 = buttons2_color[1]
 
-	elif color == colors[2]:
+	# màu xanh là: Process
+	elif type_of_mission == "process":
+		color = colors[2]
+		to_do_list = Image.open(color)
+		to_do_list = to_do_list.resize((250, 70), Image.ANTIALIAS)
+		bar = ImageTk.PhotoImage(to_do_list)
+
 		color = colors_hex[2]
 		line = lines[2]
 		button1 = buttons1_color[2]
 		button2 = buttons2_color[2]
-	
-	elif color == colors[3]:
+
+	# màu vàng là: Daily
+	elif type_of_mission == "daily":
+		color = colors[3]
+		to_do_list = Image.open(color)
+		to_do_list = to_do_list.resize((250, 70), Image.ANTIALIAS)
+		bar = ImageTk.PhotoImage(to_do_list)
+
 		color = colors_hex[3]
 		line = lines[3]
 		button1 = buttons1_color[3]
 		button2 = buttons2_color[3]
-
-
-	to_do_list_line = Image.open(line)
-	to_do_list_line = to_do_list_line.resize((20, 70), Image.ANTIALIAS)
-	bar2 = ImageTk.PhotoImage(to_do_list_line)
 
 	to_do_list_button1 = Image.open(button1)
 	to_do_list_button1 = to_do_list_button1.resize((30, 30), Image.ANTIALIAS)
