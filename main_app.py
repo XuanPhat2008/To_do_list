@@ -273,7 +273,7 @@ image_index = 0
 
 # vị trí của số thứ tự của Task
 add = 17
-for task, date, done in zip(my_to_do_list['Name'], my_to_do_list['Deadline'], my_to_do_list['Done']):	
+for task, date, done, type_of_mission in zip(my_to_do_list['Name'], my_to_do_list['Deadline'], my_to_do_list['Done'], my_to_do_list['Type']):		
 
 	# xác định loại màu mà các objects trong khung sẽ được định dạng
 	# màu đỏ là: Skill
