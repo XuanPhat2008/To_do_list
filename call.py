@@ -1,6 +1,6 @@
-from main_app import Appp
+from main_app
 
 def call_strc():
-    App()
+    main_app.App()
 
 call_strc()
