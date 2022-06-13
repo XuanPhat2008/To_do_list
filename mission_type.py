@@ -1,6 +1,6 @@
 from tkinter import *
 import tkinter as tk
-from name import name
+import name
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import pandas as pd
@@ -169,7 +169,7 @@ def mt():
 	def next_page():
 		#chuyển giao diện tiếp theo
 		win.destroy()
-		name(mission_type['Type'])
+		name.name(mission_type['Type'])
 
 	def npHover(event):
 	# hình ảnh sẽ phản ánh
