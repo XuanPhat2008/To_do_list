@@ -2,7 +2,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from whenYouFinishedYourMission import wyfym
+import whenYouFinishedYourMission
 from PIL import Image, ImageTk
 import pandas as pd
 
@@ -105,7 +105,7 @@ def ds(type_of_the_mission, name_of_the_mission, deadline_of_the_mission, checkp
 			mission_describe['Describe'] = []
 
 			win.destroy()
-			wyfym()
+			whenYouFinishedYourMission.wyfym()
 
 		def npHover(event):
 			# hình ảnh sẽ phản ánh
