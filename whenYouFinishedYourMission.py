@@ -2,6 +2,7 @@ from subprocess import call
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
+import main_app
 from tkinter import messagebox
 from PIL import Image, ImageTk
 
@@ -71,10 +72,11 @@ def wyfym():
 			done.image = done_pic
 
 
-	# hoạt động 2: khi chuột ấn vào button [New process]
+	# hoạt động 2: khi chuột ấn vào button [Done]
 	def dnEvent():
-		win.destroy()
 		messagebox.showinfo(message="To do list của bạn đã được lưu lại, quay về màn hình chính")
+		win.destroy()
+		main_app.App()
 
 
 	# tạo biến ảnh [done]
