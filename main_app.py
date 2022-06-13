@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from PIL import Image, ImageTk
-from mission_type import mt
+import mission_type
 import pandas as pd
 import random
 
@@ -84,7 +84,7 @@ def npHover(event):
 # hoạt động 2: khi chuột ấn vào button [New process]
 def npEvent():
 	main.destroy()
-	mt()
+	mission_type.mt()
 
 # tạo biến ảnh [New process]
 np_pic = StringVar()
