@@ -2,7 +2,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from describeYourGoal import ds
+import describeYourGoal
 from PIL import Image, ImageTk
 import pandas as pd
 
@@ -132,7 +132,7 @@ def name(type_of_the_mission):
 
         #chuyển giao diện tiếp theo
         win.destroy()
-        ds(mission_name['Type'], mission_name['Name'], mission_name['Deadline'], mission_name['Checkpoint'])
+        describeYourGoal.ds(mission_name['Type'], mission_name['Name'], mission_name['Deadline'], mission_name['Checkpoint'])
 
     def npHover(event):
     # hình ảnh sẽ phản ánh
