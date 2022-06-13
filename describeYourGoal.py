@@ -109,6 +109,18 @@ def ds(type_of_the_mission, name_of_the_mission, deadline_of_the_mission, checkp
 					win.destroy()
 					whenYouFinishedYourMission.wyfym()
 			
+				elif len(mission_describe[i]) == max(length):
+					for x in mission_describe[i]:
+						if x == '':
+							# xóa đi dữ liệu cũ
+							mission_describe['Type'] = []
+							mission_describe['Name'] = []
+							mission_describe['Deadline'] = []
+							mission_describe['Checkpoint'] = []
+							mission_describe['Describe'] = []
+							win.destroy()
+							whenYouFinishedYourMission.wyfym()
+			
 			# tạo dự liệu mới thành dạng ghi vào file
 			my_mission = pd.DataFrame(mission_describe)
 
