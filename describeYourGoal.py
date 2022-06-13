@@ -88,6 +88,27 @@ def ds(type_of_the_mission, name_of_the_mission, deadline_of_the_mission, checkp
 			mission_describe['Describe'].append(string_describe)
 
 			print(mission_describe)
+			
+			length = [1,1,1,1,1]
+			# kiểm tra độ dài trong trường nhập
+			length[0] = len(mission_describe['Type'])
+			length[1] = len(mission_describe['Name'])
+			length[2] = len(mission_describe['Deadline'])
+			length[3] = len(mission_describe['Checkpoint'])
+			length[4] = len(mission_describe['Describe'])
+
+			for i in mission_describe:
+				if len(mission_describe[i]) < max(length):
+					# xóa đi dữ liệu cũ
+					mission_describe['Type'] = []
+					mission_describe['Name'] = []
+					mission_describe['Deadline'] = []
+					mission_describe['Checkpoint'] = []
+					mission_describe['Describe'] = []
+
+					win.destroy()
+					whenYouFinishedYourMission.wyfym()
+			
 			# tạo dự liệu mới thành dạng ghi vào file
 			my_mission = pd.DataFrame(mission_describe)
 
