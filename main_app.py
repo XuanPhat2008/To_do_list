@@ -27,15 +27,243 @@ def App():
 
 
 	# DÒNG 2
+	# tạo FRAME THỨ 1: Tạo report ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 
-	# tạo frame thứ 1: Lịch
-	canlendar_frame = Frame(main, bg="white", width = 300, height = 350)
-	canlendar_frame.grid(column = 1, row = 2, sticky = tk.W)
+	report_frame = Frame(main, bg="white", width = 300, height = 350)
+	report_frame.grid(column = 1, row = 2, sticky = tk.W)
 
-	# tạo frame thứ 2: Tạo to-do-list mới
+	# hiển thị Level --------------------------------------------------------------------------------------------------------
+	Label(report_frame, text="Level 9", font=('Courier New', 20, "bold"), bg="#fff").place(x=15, y=10)
+
+	# hiển thị kinh nghiệm --------------------------------------------------------------------------------------------------------
+	Label(report_frame, text="300/1000", font=('Courier New', 10), bg="#fff").place(x=45, y=40)
+
+
+	# line ngăn cách --------------------------------------------------------------------------------------------------------
+	photo_line_white = Image.open('Resource/line_white.png')
+	photo_line_white = photo_line_white.resize((15, 40), Image.ANTIALIAS)
+	line_white = ImageTk.PhotoImage(photo_line_white)
+	Label(report_frame, image = line_white, highlightthickness = 0, bd = 0, bg="#fff", fg="#404040").place(x=146, y=8)
+
+
+	# hiển thị biểu tượng Gem -----------------------------------------------------------------------------------------------
+	photo_gem = Image.open('Resource/Gem.png')
+	photo_gem = photo_gem.resize((40, 40), Image.ANTIALIAS)
+	gem = ImageTk.PhotoImage(photo_gem)
+	Label(report_frame, image = gem, highlightthickness = 0, bd = 0, bg="#fff", fg="#404040").place(x=170, y=8)
+
+	
+	# hiển thị số Gem -------------------------------------------------------------------------------------------------------
+	Label(report_frame, text="300", font=('Vogue', 20, 'bold'), bg="#fff").place(x=220, y=10)
+
+	def getHover(event):
+		# hình ảnh sẽ phản ánh
+
+		# chưa hover
+		if get_pic.get() == 'Resource/Buttons/Button_get1.png':
+			# sẽ đổi button sang trạng thái: đã hover
+			get_pic.set('Resource/Buttons/Button_get2.png')
+			get = PhotoImage(file=get_pic.get())
+			get_button.config(image = get)
+			get_button.image = get
+
+		# đã hover
+		else:
+			# set button về trạng thái ban đầu
+			get_pic.set('Resource/Buttons/Button_get1.png')
+			get = PhotoImage(file=get_pic.get())
+			get_button.config(image = get)
+			get_button.image = get
+
+	# chuyển hướng đế giao diện tạo nhiệm vụ mới
+	def getEvent():
+		main.destroy()
+		mission_type.mt()
+
+	# hiển thị button [Get]
+	# tạo biến ảnh [Get]
+	get_pic = StringVar()
+	get_pic.set('Resource/Buttons/Button_get1.png')
+
+	# hiển thị biến ảnh [Get] ra màn hình
+	photo_get = Image.open(get_pic.get())
+	#photo_get = photo_get.resize((60, 25), Image.ANTIALIAS)
+	get = ImageTk.PhotoImage(photo_get)
+	get_button = Button(report_frame, image = get, command = getEvent, highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	get_button.place(x=150, y=55)
+
+
+	# chuột còn ở trên button
+	get_button.bind('<Enter>', getHover)
+	# chuột rời button
+	get_button.bind('<Leave>', getHover)
+
+# -------------------------------------------------------------------------------------------------------------------
+
+	def dailyBoxHover(event):
+	# hình ảnh sẽ phản ánh
+
+		# chưa hover
+		if dailyBox_pic.get() == 'Resource/Buttons/Button_dailyBox1.png':
+			# sẽ đổi button sang trạng thái: đã hover
+			dailyBox_pic.set('Resource/Buttons/Button_dailyBox2.png')
+			dailyBox = PhotoImage(file=dailyBox_pic.get())
+			dailyBox_button.config(image = dailyBox)
+			dailyBox_button.image = dailyBox
+
+		# đã hover
+		else:
+			# set button về trạng thái ban đầu
+			dailyBox_pic.set('Resource/Buttons/Button_dailyBox1.png')
+			dailyBox = PhotoImage(file=dailyBox_pic.get())
+			dailyBox_button.config(image = dailyBox)
+			dailyBox_button.image = dailyBox
+
+
+	# hiển thị button [Daily box]
+	# tạo biến ảnh [Daily box]
+	dailyBox_pic = StringVar()
+	dailyBox_pic.set('Resource/Buttons/Button_dailyBox1.png')
+
+	# hiển thị biến ảnh [Daily box] ra màn hình
+	photo_dailyBox = Image.open(dailyBox_pic.get())
+	#photo_dailyBox = photo_dailyBox.resize((80, 25), Image.ANTIALIAS)
+	dailyBox = ImageTk.PhotoImage(photo_dailyBox)
+	dailyBox_button = Button(report_frame, image = dailyBox, highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	dailyBox_button.place(x=215, y=55)
+
+
+	# chuột còn ở trên button
+	dailyBox_button.bind('<Enter>', dailyBoxHover)
+	# chuột rời button
+	dailyBox_button.bind('<Leave>', dailyBoxHover)
+
+
+	# hiển thị các huân chương
+
+	# huân chương [Process] =========================================================================================================
+	photo_processmedal = Image.open('Resource/Medals/process_medal.png')
+	photo_processmedal = photo_processmedal.resize((45, 60), Image.ANTIALIAS)
+	processmedal = ImageTk.PhotoImage(photo_processmedal)
+	Label(report_frame, image = processmedal, highlightthickness = 0, bd = 0, bg="#fff").place(x=10, y=100)
+
+	processmedal_text = Label(report_frame, text = "12", font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff")
+	processmedal_text.place(x=60, y=110)
+
+	# Red cube
+	photo_red = Image.open('Resource/Red.png')
+	photo_red = photo_red.resize((20, 20), Image.ANTIALIAS)
+	red = ImageTk.PhotoImage(photo_red)
+	Label(report_frame, image = red, highlightthickness = 0, bd = 0, bg="#fff").place(x=20, y=190)
+
+	Label(report_frame, text = "process", font = ('Calibri', 15), highlightthickness = 0, bd = 0, bg="#fff").place(x=50, y=185)
+
+	photo_blank1 = Image.open('Resource/Blank.png')
+	photo_blank1 = photo_blank1.resize((55, 27), Image.ANTIALIAS)
+	blank1 = ImageTk.PhotoImage(photo_blank1)
+	Label(report_frame, image = blank1, highlightthickness = 0, bd = 0, bg="#fff").place(x=125, y=186)
+
+	Label(report_frame, text = "12", font = ('Calibri', 14), highlightthickness = 0, bd = 0, bg="#404040", fg="#fff").place(x=140, y=186)
+
+
+	# huân chương [Skill] ===========================================================================================================
+	photo_skillmedal = Image.open('Resource/Medals/skill_medal.png')
+	photo_skillmedal = photo_skillmedal.resize((45, 60), Image.ANTIALIAS)
+	skillmedal = ImageTk.PhotoImage(photo_skillmedal)
+	Label(report_frame, image = skillmedal, highlightthickness = 0, bd = 0, bg="#fff").place(x=100, y=100)
+
+	skillmedal_text = Label(report_frame, text = "10", font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff")
+	skillmedal_text.place(x=150, y=110)
+
+	# Blue cube
+	photo_blue = Image.open('Resource/Blue.png')
+	photo_blue = photo_blue.resize((20, 20), Image.ANTIALIAS)
+	blue = ImageTk.PhotoImage(photo_blue)
+	Label(report_frame, image = blue, highlightthickness = 0, bd = 0, bg="#fff").place(x=20, y=240)
+
+	Label(report_frame, text = "skill", font = ('Calibri', 15), highlightthickness = 0, bd = 0, bg="#fff").place(x=50, y=235)
+
+	photo_blank2 = Image.open('Resource/Blank.png')
+	photo_blank2 = photo_blank2.resize((55, 27), Image.ANTIALIAS)
+	blank2 = ImageTk.PhotoImage(photo_blank2)
+	Label(report_frame, image = blank2, highlightthickness = 0, bd = 0, bg="#fff").place(x=125, y=236)
+
+	Label(report_frame, text = "10", font = ('Calibri', 14), highlightthickness = 0, bd = 0, bg="#404040", fg="#fff").place(x=140, y=236)
+
+
+
+	# huân chương [Daily] ===========================================================================================================
+	photo_dailymedal = Image.open('Resource/Medals/daily_medal.png')
+	photo_dailymedal = photo_dailymedal.resize((45, 60), Image.ANTIALIAS)
+	dailymedal = ImageTk.PhotoImage(photo_dailymedal)
+	Label(report_frame, image = dailymedal, highlightthickness = 0, bd = 0, bg="#fff").place(x=190, y=100)
+
+	dailymedal_text = Label(report_frame, text = "8", font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff")
+	dailymedal_text.place(x=240, y=110)
+
+	# Yellow cube
+	photo_yellow = Image.open('Resource/Yellow.png')
+	photo_yellow = photo_yellow.resize((20, 20), Image.ANTIALIAS)
+	yellow = ImageTk.PhotoImage(photo_yellow)
+	Label(report_frame, image = yellow, highlightthickness = 0, bd = 0, bg="#fff").place(x=20, y=290)
+
+	Label(report_frame, text = "daily", font = ('Calibri', 15), highlightthickness = 0, bd = 0, bg="#fff").place(x=50, y=285)
+
+	photo_blank3 = Image.open('Resource/Blank.png')
+	photo_blank3 = photo_blank3.resize((55, 27), Image.ANTIALIAS)
+	blank3 = ImageTk.PhotoImage(photo_blank3)
+	Label(report_frame, image = blank3, highlightthickness = 0, bd = 0, bg="#fff").place(x=125, y=286)
+
+	Label(report_frame, text = "8", font = ('Calibri', 14), highlightthickness = 0, bd = 0, bg="#404040", fg="#fff").place(x=140, y=286)
+
+
+	# Button Game
+
+	def gameHover(event):
+	# hình ảnh sẽ phản ánh
+
+		# chưa hover
+		if game_pic.get() == 'Resource/Buttons/game1.png':
+			# sẽ đổi button sang trạng thái: đã hover
+			game_pic.set('Resource/Buttons/game2.png')
+			game = PhotoImage(file=game_pic.get())
+			game_button.config(image = game)
+			game_button.image = game
+
+		# đã hover
+		else:
+			# set button về trạng thái ban đầu
+			game_pic.set('Resource/Buttons/game1.png')
+			game = PhotoImage(file=game_pic.get())
+			game_button.config(image = game)
+			game_button.image = game
+
+
+	# hiển thị button [Game]
+	# tạo biến ảnh [Game]
+	game_pic = StringVar()
+	game_pic.set('Resource/Buttons/game1.png')
+
+	# hiển thị biến ảnh [Game] ra màn hình
+	photo_game = Image.open(game_pic.get())
+	#photo_game = photo_game.resize((70, 50), Image.ANTIALIAS)
+	game = ImageTk.PhotoImage(photo_game)
+	game_button = Button(report_frame, image = game, highlightthickness = 0, bd = 0, bg="#fff", fg="#404040", activebackground="#fff")
+	game_button.place(x=220, y=200)
+
+
+	# chuột còn ở trên button
+	game_button.bind('<Enter>', gameHover)
+	# chuột rời button
+	game_button.bind('<Leave>', gameHover)
+
+
+	Label(report_frame, text="Game", font=('Calibri', 16, 'bold'), highlightthickness = 0, bd = 0, bg="#fff").place(x=219, y=250)
+
+
+	# tạo FRAME THỨ 2: Tạo to-do-list mới ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 	mission_frame = Frame(main, bg = "#404040", width = 500, height = 350)
 	mission_frame.grid(column = 2, row = 2, sticky = tk.W)
-
 
 	# MAIN 1: Manage and check your missions ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
@@ -45,13 +273,11 @@ def App():
 	Label(mission_frame, text="there are so much things you have done", font=('Calibri', 14), bg="#404040", fg="#fff", anchor=N).grid(column=1, row=2)
 
 
-
 	# ẢNH MINH HỌA CHÍNH: chiếc Cúp ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 	photo = Image.open('Resource/Cup.png')
 	photo = photo.resize((160, 160), Image.ANTIALIAS)
 	cup = ImageTk.PhotoImage(photo)
 	Label(mission_frame, image = cup, highlightthickness = 0, bd = 0).grid(column=1, row=3, pady=20)
-
 
 
 	# MAIN BUTTONS: hai button chính ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -161,7 +387,7 @@ def App():
 	Label(main, image = dash2, highlightthickness = 0, bd = 0).place(x=300, y=439)
 
 
-	#tạo frame thứ 3: Chân
+	# TẠO FRAME THỨ 3: Chân ---------------------------------------------------------------------------------------------------------------
 	last_frame = Frame(main, bg = "#404040", width = 800, height = 150)
 	last_frame.grid(column = 1, row = 3, columnspan = 2, sticky = tk.W)
 
@@ -223,7 +449,9 @@ def App():
 		Label(second_frame, image = line, highlightthickness = 0, bd = 0).place(x=45, y=vitri_y-5)
 
 		# tên của Task
-		# xử lí cho chuỗi khong dài quá 14 kí tự, nếu khong sẽ làm hỏng bố cục của app
+		# xử lí cho chuỗi khong dài quá 14 kí t
+
+	# tạo frame thứ 1: Report, nếu khong sẽ làm hỏng bố cục của app
 		string = ""
 		dem = 0
 		for char in task:
