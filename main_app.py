@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import mission_type
+import timer
 import pandas as pd
 import random
 
@@ -17,7 +18,15 @@ def App():
 	main.config(bg="#404040")
 
 	# khong cho phóng to màn hình
-	#main.resizable(False, False)
+	main.resizable(False, False)
+
+	# khai báo file csv mang dữ liệu chính
+	my_to_do_list = pd.read_csv('my_todolist.csv')
+
+	# khai báo file csv mang dữ liệu người dùng về [Level] và [Gem]
+	your_experiments = pd.read_csv('your_experiments.csv')
+	level_file = pd.read_csv('level.csv')
+
 
 	# DÒNG 1
 
@@ -32,11 +41,82 @@ def App():
 	report_frame = Frame(main, bg="white", width = 300, height = 350)
 	report_frame.grid(column = 1, row = 2, sticky = tk.W)
 
+		# các biến lưu lại thông tin
+
+	# biến lưu lại [Level] ------------------
+	number_of_level = StringVar()
+	number_of_level.set('0')
+	
+	# biến lưu lại [Gem] --------------------
+	number_of_gem = StringVar()
+	number_of_gem.set('0')
+
+	# biến lưu lại [Experiments]
+	number_of_experiments = StringVar()
+	number_of_experiments.set('0')
+
+	# biến lưu lại số lượng task về [Process]
+	number_of_process = StringVar()
+	number_of_process.set('0')
+	
+	# biến lưu lại số lượng task về [Skill]
+	number_of_skill = StringVar()
+	number_of_skill.set('0')
+	
+	# biến lưu lại số lượng task về [Daily]
+	number_of_daily = StringVar()
+	number_of_daily.set('0')
+
+	# biến lưu lại tổng số tasks đã hoàn thành
+	number_of_tasks = StringVar()
+	number_of_tasks.set('0')
+
+	# lấy số liệu về các tasks
+	for missionType, missionProcess in zip(my_to_do_list['Type'], my_to_do_list['Done']):
+		# nếu nhiệm vụ nào chưa hoàn thành sẽ khong tính
+		if missionProcess == False:
+			continue
+
+		if missionType == 'process':
+			so = str(int(number_of_process.get()) + 1)
+			number_of_process.set(so)
+
+			so = str(int(number_of_tasks.get()) + 1)
+			number_of_tasks.set(so)
+
+		elif missionType == 'skill':
+			so = str(int(number_of_skill.get()) + 1)
+			number_of_skill.set(so)
+
+			so = str(int(number_of_tasks.get()) + 1)
+			number_of_tasks.set(so)
+
+		elif missionType == 'daily':
+			so = str(int(number_of_daily.get()) + 1)
+			number_of_daily.set(so)
+
+			so = str(int(number_of_tasks.get()) + 1)
+			number_of_tasks.set(so)
+
+	# lấy số liệu về Level và Gem trong file csv [your_experiments.csv]
+
+	# [Level]
+	number_of_level.set(str(your_experiments['Level'].iloc[0]))
+	
+	# [Gem]
+	number_of_gem.set(str(your_experiments['Gem'].iloc[0]))
+
+
+
 	# hiển thị Level --------------------------------------------------------------------------------------------------------
-	Label(report_frame, text="Level 9", font=('Courier New', 20, "bold"), bg="#fff").place(x=15, y=10)
+	Label(report_frame, text="Level", font=('Courier New', 20, "bold"), bg="#fff", fg="#404040").place(x=15, y=10)
+
+	level = Label(report_frame, text= number_of_level.get(), font=('Courier New', 20, "bold"), bg="#fff", fg="#404040")
+	level.place(x=110, y=10)
+
 
 	# hiển thị kinh nghiệm --------------------------------------------------------------------------------------------------------
-	Label(report_frame, text="300/1000", font=('Courier New', 10), bg="#fff").place(x=45, y=40)
+	#Label(report_frame, text="300/1000", font=('Courier New', 10), bg="#fff").place(x=45, y=40)
 
 
 	# line ngăn cách --------------------------------------------------------------------------------------------------------
@@ -54,7 +134,10 @@ def App():
 
 	
 	# hiển thị số Gem -------------------------------------------------------------------------------------------------------
-	Label(report_frame, text="300", font=('Vogue', 20, 'bold'), bg="#fff").place(x=220, y=10)
+	gem_text = Label(report_frame, text = number_of_gem.get(), font=('Vogue', 20, 'bold'), bg="#fff", fg="#404040")
+	gem_text.place(x=220, y=10)
+
+# -------------------------------------------------------------------------------------------------------------------
 
 	def getHover(event):
 		# hình ảnh sẽ phản ánh
@@ -119,6 +202,9 @@ def App():
 			dailyBox_button.config(image = dailyBox)
 			dailyBox_button.image = dailyBox
 
+	def dailyBoxEvent():
+		timer.dailybox()
+
 
 	# hiển thị button [Daily box]
 	# tạo biến ảnh [Daily box]
@@ -127,9 +213,8 @@ def App():
 
 	# hiển thị biến ảnh [Daily box] ra màn hình
 	photo_dailyBox = Image.open(dailyBox_pic.get())
-	#photo_dailyBox = photo_dailyBox.resize((80, 25), Image.ANTIALIAS)
 	dailyBox = ImageTk.PhotoImage(photo_dailyBox)
-	dailyBox_button = Button(report_frame, image = dailyBox, highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	dailyBox_button = Button(report_frame, image = dailyBox, command = dailyBoxEvent, highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
 	dailyBox_button.place(x=215, y=55)
 
 
@@ -137,6 +222,51 @@ def App():
 	dailyBox_button.bind('<Enter>', dailyBoxHover)
 	# chuột rời button
 	dailyBox_button.bind('<Leave>', dailyBoxHover)
+
+# -------------------------------------------------------------------------------------------------------------------
+
+	def gameHover(event):
+		# hình ảnh sẽ phản ánh
+
+		# chưa hover
+		if game_pic.get() == 'Resource/Buttons/Button_game1.png':
+			# sẽ đổi button sang trạng thái: đã hover
+			game_pic.set('Resource/Buttons/Button_game2.png')
+			game = PhotoImage(file=game_pic.get())
+			game_button.config(image = game)
+			game_button.image = game
+
+		# đã hover
+		else:
+			# set button về trạng thái ban đầu
+			game_pic.set('Resource/Buttons/Button_game1.png')
+			game = PhotoImage(file=game_pic.get())
+			game_button.config(image = game)
+			game_button.image = game
+
+	# chuyển hướng đế giao diện tạo nhiệm vụ mới
+	def getEvent():
+		main.destroy()
+		mission_type.mt()
+
+	# hiển thị button [Get]
+	# tạo biến ảnh [Get]
+	game_pic = StringVar()
+	game_pic.set('Resource/Buttons/Button_game1.png')
+
+	# hiển thị biến ảnh [Get] ra màn hình
+	photo_game = Image.open(game_pic.get())
+	game = ImageTk.PhotoImage(photo_game)
+	game_button = Button(report_frame, image = game, command = getEvent, highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	game_button.place(x=209, y=295)
+
+
+	# chuột còn ở trên button
+	game_button.bind('<Enter>', gameHover)
+	# chuột rời button
+	game_button.bind('<Leave>', gameHover)
+
+# -------------------------------------------------------------------------------------------------------------------
 
 
 	# hiển thị các huân chương
@@ -147,8 +277,8 @@ def App():
 	processmedal = ImageTk.PhotoImage(photo_processmedal)
 	Label(report_frame, image = processmedal, highlightthickness = 0, bd = 0, bg="#fff").place(x=10, y=100)
 
-	processmedal_text = Label(report_frame, text = "12", font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff")
-	processmedal_text.place(x=60, y=110)
+	processmedal_text1 = Label(report_frame, text = number_of_process.get(), font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	processmedal_text1.place(x=60, y=110)
 
 	# Red cube
 	photo_red = Image.open('Resource/Red.png')
@@ -158,12 +288,9 @@ def App():
 
 	Label(report_frame, text = "process", font = ('Calibri', 15), highlightthickness = 0, bd = 0, bg="#fff").place(x=50, y=185)
 
-	photo_blank1 = Image.open('Resource/Blank.png')
-	photo_blank1 = photo_blank1.resize((55, 27), Image.ANTIALIAS)
-	blank1 = ImageTk.PhotoImage(photo_blank1)
-	Label(report_frame, image = blank1, highlightthickness = 0, bd = 0, bg="#fff").place(x=125, y=186)
 
-	Label(report_frame, text = "12", font = ('Calibri', 14), highlightthickness = 0, bd = 0, bg="#404040", fg="#fff").place(x=140, y=186)
+	processmedal_text2 = Label(report_frame, text = number_of_process.get(), font = ('Calibri', 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	processmedal_text2.place(x=140, y=183)
 
 
 	# huân chương [Skill] ===========================================================================================================
@@ -172,8 +299,8 @@ def App():
 	skillmedal = ImageTk.PhotoImage(photo_skillmedal)
 	Label(report_frame, image = skillmedal, highlightthickness = 0, bd = 0, bg="#fff").place(x=100, y=100)
 
-	skillmedal_text = Label(report_frame, text = "10", font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff")
-	skillmedal_text.place(x=150, y=110)
+	skillmedal_text1 = Label(report_frame, text = number_of_skill.get(), font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	skillmedal_text1.place(x=150, y=110)
 
 	# Blue cube
 	photo_blue = Image.open('Resource/Blue.png')
@@ -183,12 +310,9 @@ def App():
 
 	Label(report_frame, text = "skill", font = ('Calibri', 15), highlightthickness = 0, bd = 0, bg="#fff").place(x=50, y=235)
 
-	photo_blank2 = Image.open('Resource/Blank.png')
-	photo_blank2 = photo_blank2.resize((55, 27), Image.ANTIALIAS)
-	blank2 = ImageTk.PhotoImage(photo_blank2)
-	Label(report_frame, image = blank2, highlightthickness = 0, bd = 0, bg="#fff").place(x=125, y=236)
 
-	Label(report_frame, text = "10", font = ('Calibri', 14), highlightthickness = 0, bd = 0, bg="#404040", fg="#fff").place(x=140, y=236)
+	skillmedal_text2 = Label(report_frame, text = number_of_skill.get(), font = ('Calibri', 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	skillmedal_text2.place(x=140, y=233)
 
 
 
@@ -198,8 +322,8 @@ def App():
 	dailymedal = ImageTk.PhotoImage(photo_dailymedal)
 	Label(report_frame, image = dailymedal, highlightthickness = 0, bd = 0, bg="#fff").place(x=190, y=100)
 
-	dailymedal_text = Label(report_frame, text = "8", font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff")
-	dailymedal_text.place(x=240, y=110)
+	dailymedal_text1 = Label(report_frame, text = number_of_daily.get(), font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	dailymedal_text1.place(x=240, y=110)
 
 	# Yellow cube
 	photo_yellow = Image.open('Resource/Yellow.png')
@@ -209,56 +333,24 @@ def App():
 
 	Label(report_frame, text = "daily", font = ('Calibri', 15), highlightthickness = 0, bd = 0, bg="#fff").place(x=50, y=285)
 
-	photo_blank3 = Image.open('Resource/Blank.png')
-	photo_blank3 = photo_blank3.resize((55, 27), Image.ANTIALIAS)
-	blank3 = ImageTk.PhotoImage(photo_blank3)
-	Label(report_frame, image = blank3, highlightthickness = 0, bd = 0, bg="#fff").place(x=125, y=286)
 
-	Label(report_frame, text = "8", font = ('Calibri', 14), highlightthickness = 0, bd = 0, bg="#404040", fg="#fff").place(x=140, y=286)
+	dailymedal_text2 = Label(report_frame, text = number_of_daily.get(), font = ('Calibri', 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	dailymedal_text2.place(x=140, y=283)
 
 
-	# Button Game
+	# tổng hợp số tasks đã hoàn thành
+	Label(report_frame, text="Total", font=('Calibri', 16, 'bold'), highlightthickness = 0, bd = 0, bg="#fff", fg="#404040").place(x=215, y=190)
 
-	def gameHover(event):
-	# hình ảnh sẽ phản ánh
+	# dựa vào tổng các chữ số của số task, ta sẽ căn được vị trí của total tasks
+	if len(number_of_tasks.get()) == 1:
+		total_tasks_x = 224
+	elif len(number_of_tasks.get()) == 2:
+		total_tasks_x = 206
+	elif len(number_of_tasks.get()) == 3:
+		total_tasks_x = 186
 
-		# chưa hover
-		if game_pic.get() == 'Resource/Buttons/game1.png':
-			# sẽ đổi button sang trạng thái: đã hover
-			game_pic.set('Resource/Buttons/game2.png')
-			game = PhotoImage(file=game_pic.get())
-			game_button.config(image = game)
-			game_button.image = game
-
-		# đã hover
-		else:
-			# set button về trạng thái ban đầu
-			game_pic.set('Resource/Buttons/game1.png')
-			game = PhotoImage(file=game_pic.get())
-			game_button.config(image = game)
-			game_button.image = game
-
-
-	# hiển thị button [Game]
-	# tạo biến ảnh [Game]
-	game_pic = StringVar()
-	game_pic.set('Resource/Buttons/game1.png')
-
-	# hiển thị biến ảnh [Game] ra màn hình
-	photo_game = Image.open(game_pic.get())
-	#photo_game = photo_game.resize((70, 50), Image.ANTIALIAS)
-	game = ImageTk.PhotoImage(photo_game)
-	game_button = Button(report_frame, image = game, highlightthickness = 0, bd = 0, bg="#fff", fg="#404040", activebackground="#fff")
-	game_button.place(x=220, y=200)
-
-
-	# chuột còn ở trên button
-	game_button.bind('<Enter>', gameHover)
-	# chuột rời button
-	game_button.bind('<Leave>', gameHover)
-
-
-	Label(report_frame, text="Game", font=('Calibri', 16, 'bold'), highlightthickness = 0, bd = 0, bg="#fff").place(x=219, y=250)
+	total_tasks = Label(report_frame, text=number_of_tasks.get(), font=('Calibri', 45, 'bold'), highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
+	total_tasks.place(x=total_tasks_x, y=215)
 
 
 	# tạo FRAME THỨ 2: Tạo to-do-list mới ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
@@ -420,20 +512,131 @@ def App():
 		#print(my_to_do_list.iloc[index])
 		#print(arr)
 
-		if my_to_do_list['Done'].iloc[index] == True:
-			#print('hi')
+		if my_to_do_list['Done'].iloc[index] == True: # +  +  +  +  +  +  +  +  +  +  +  +  +  +  +  +  +  +  +
+			#print('not done')
 			arr['Done'][index] = False
-			print()
 
-		elif my_to_do_list['Done'].iloc[index] == False:
-			#print('hello')
+			number_of_gem.set(str(int(number_of_gem.get()) - my_to_do_list['Checkpoint'].iloc[index]))
+			gem_text.config(text=number_of_gem.get())
+
+			number_of_tasks.set(str(int(number_of_tasks.get()) - 1))
+			total_tasks.config(text=number_of_tasks.get())
+
+			# dựa vào tổng các chữ số của số task, ta sẽ căn được vị trí của total tasks
+			if len(number_of_tasks.get()) == 1:
+				total_tasks_x = 224
+			elif len(number_of_tasks.get()) == 2:
+				total_tasks_x = 206
+			elif len(number_of_tasks.get()) == 3:
+				total_tasks_x = 186
+
+			total_tasks.place(x=total_tasks_x, y=215)
+
+
+			if my_to_do_list['Type'].iloc[index] == 'process':
+				so = str(int(number_of_process.get()) - 1)
+				#print('so:',so)
+				
+				# thay đổi giá trị của số task [Process] đã hoành thành
+				number_of_process.set(so)
+
+				# thay số task [Process] trên màn hình
+				processmedal_text1.config(text = number_of_process.get())
+				processmedal_text2.config(text = number_of_process.get())
+
+			elif my_to_do_list['Type'].iloc[index] == 'skill':
+				so = str(int(number_of_skill.get()) - 1)
+				#print('so:',so)				
+				
+				# thay đổi giá trị của số task [Skill] đã hoành thành
+				number_of_skill.set(so)
+
+				# thay đổi số task [Skill] trên màn hình
+				skillmedal_text1.config(text = number_of_skill.get())
+				skillmedal_text2.config(text = number_of_skill.get())
+
+			elif my_to_do_list['Type'].iloc[index] == 'daily':
+				so = str(int(number_of_daily.get()) - 1)
+				#print('so:',so)
+
+				# thay đổi giá trị của số task [Daily] đã hoành thành				
+				number_of_daily.set(so)
+
+				# thay đổi số task [Daily] trên màn hình
+				dailymedal_text1.config(text = number_of_daily.get())
+				dailymedal_text2.config(text = number_of_daily.get())
+
+
+		elif my_to_do_list['Done'].iloc[index] == False: # +  +  +  +  +  +  +  +  +  +  +  +  +  +  +  +  +  +
+			#print('done')
 			arr['Done'][index] = True
-			print()
+
+			number_of_gem.set(str(int(number_of_gem.get()) + my_to_do_list['Checkpoint'].iloc[index]))
+			gem_text.config(text=number_of_gem.get())
+
+			number_of_tasks.set(str(int(number_of_tasks.get()) + 1))
+			total_tasks.config(text=number_of_tasks.get())
+
+			# dựa vào tổng các chữ số của số task, ta sẽ căn được vị trí của total tasks
+			if len(number_of_tasks.get()) == 1:
+				total_tasks_x = 224
+			elif len(number_of_tasks.get()) == 2:
+				total_tasks_x = 206
+			elif len(number_of_tasks.get()) == 3:
+				total_tasks_x = 186
+
+			total_tasks.place(x=total_tasks_x, y=215)
+
+
+			# kiểm tra xem số Gem thu thập được mốc Level chưa
+			if int(number_of_gem.get()) >= level_file['Gem'].iloc[int(number_of_level.get())]:
+				number_of_level.set(str(int(number_of_level.get()) + 1))
+				level.config(text=number_of_level.get())
+
+
+			if my_to_do_list['Type'].iloc[index] == 'process':
+				so = str(int(number_of_process.get()) + 1)
+				#print('so:',so)
+
+				# thay đổi giá trị của số task [Process] đã hoành thành
+				number_of_process.set(so)
+
+				# thay số task [Process] trên màn hình
+				processmedal_text1.config(text = number_of_process.get())
+				processmedal_text2.config(text = number_of_process.get())
+
+			elif my_to_do_list['Type'].iloc[index] == 'skill':
+				so = str(int(number_of_skill.get()) + 1)
+				#print('so:',so)				
+
+				# thay đổi giá trị của số task [Skill] đã hoành thành
+				number_of_skill.set(so)
+				
+				# thay số task [Skill] trên màn hình
+				skillmedal_text1.config(text = number_of_skill.get())
+				skillmedal_text2.config(text = number_of_skill.get())
+
+			elif my_to_do_list['Type'].iloc[index] == 'daily':
+				so = str(int(number_of_daily.get()) + 1)
+				#print('so:',so)				
+
+				# thay đổi giá trị của số task [Daily] đã hoành thành
+				number_of_daily.set(so)
+
+				# thay số task [Daily] trên màn hình
+				dailymedal_text1.config(text = number_of_daily.get())
+				dailymedal_text2.config(text = number_of_daily.get())
+
+			
 
 		my_to_do_list['Done']  = pd.DataFrame(arr)
+		your_experiments['Gem'].iloc[0] = int(number_of_gem.get())
+		your_experiments['Level'].iloc[0] = int(number_of_level.get())
 
-		print(my_to_do_list)
+		#print(my_to_do_list)
 		my_to_do_list.to_csv('my_todolist.csv', index=False)
+		print(your_experiments)
+		your_experiments.to_csv('your_experiments.csv', index=False)
 
 
 
@@ -451,7 +654,7 @@ def App():
 		# tên của Task
 		# xử lí cho chuỗi khong dài quá 14 kí t
 
-	# tạo frame thứ 1: Report, nếu khong sẽ làm hỏng bố cục của app
+		# tạo frame thứ 1: Report, nếu khong sẽ làm hỏng bố cục của app
 		string = ""
 		dem = 0
 		for char in task:
@@ -475,15 +678,12 @@ def App():
 			task_buttons.append(tk.Checkbutton(second_frame, image=but2, selectimage=but1, indicatoron=False, onvalue=False, offvalue=True, highlightthickness = 0, bd = 0, bg=color, activebackground=color, selectcolor=color))
 			buttons_coordinates.append(vitri_y+28)
 
-	a = BooleanVar()
-	b = BooleanVar()
+	
 	colors = ['Resource/Tasks/Black.png', 'Resource/Tasks/Red.png', 'Resource/Tasks/Blue.png', 'Resource/Tasks/Yellow.png']
 	colors_hex = ['#404040', '#F36447', '#558ED5', '#EEC44C']
 	lines = ['Resource/Tasks/line_black.png', 'Resource/Tasks/line_red.png', 'Resource/Tasks/line_blue.png', 'Resource/Tasks/line_yellow.png']
 	buttons1_color = ['Resource/Buttons/Button_doneBlack1.png', 'Resource/Buttons/Button_doneRed1.png', 'Resource/Buttons/Button_doneBlue1.png', 'Resource/Buttons/Button_doneYellow1.png']
 	buttons2_color = ['Resource/Buttons/Button_doneBlack2.png', 'Resource/Buttons/Button_doneRed2.png', 'Resource/Buttons/Button_doneBlue2.png', 'Resource/Buttons/Button_doneYellow2.png']
-
-	my_to_do_list = pd.read_csv('my_todolist.csv')
 
 	dong=2
 	vitri_y = 80
@@ -506,7 +706,7 @@ def App():
 
 		# xác định loại màu mà các objects trong khung sẽ được định dạng
 		# màu đỏ là: Skill
-		if type_of_mission == "skill":
+		if type_of_mission == "process":
 			color = colors[1]
 			to_do_list = Image.open(color)
 			to_do_list = to_do_list.resize((250, 70), Image.ANTIALIAS)
@@ -518,7 +718,7 @@ def App():
 			button2 = buttons2_color[1]
 
 		# màu xanh là: Process
-		elif type_of_mission == "process":
+		elif type_of_mission == "skill":
 			color = colors[2]
 			to_do_list = Image.open(color)
 			to_do_list = to_do_list.resize((250, 70), Image.ANTIALIAS)
