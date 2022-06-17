@@ -5,6 +5,7 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 import mission_type
 import timer
+from game_method import GAME
 import pandas as pd
 import random
 
@@ -246,8 +247,8 @@ def App():
 
 	# chuyển hướng đế giao diện tạo nhiệm vụ mới
 	def getEvent():
-		main.destroy()
-		mission_type.mt()
+		x = GAME()
+		x.while_not_done()
 
 	# hiển thị button [Get]
 	# tạo biến ảnh [Get]
