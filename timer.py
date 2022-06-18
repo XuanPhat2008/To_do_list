@@ -7,7 +7,7 @@ import random
 from datetime import datetime
 import sys
 
-def funct():
+def dailybox():
     #Define the tkinter instance
     win= Toplevel()
     win.title("Daily reward")
