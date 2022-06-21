@@ -114,6 +114,7 @@ def ds(type_of_the_mission, name_of_the_mission, deadline_of_the_mission, checkp
 			
 				elif len(mission_describe[i]) == max(length):
 					for x in mission_describe[i]:
+						# nếu khong có dữ liệu trong bộ nhớ tạm, thì sẽ bỏ qua lưu vào file csv
 						if x == '':
 							# xóa đi dữ liệu cũ
 							mission_describe['Type'] = []
@@ -123,6 +124,18 @@ def ds(type_of_the_mission, name_of_the_mission, deadline_of_the_mission, checkp
 							mission_describe['Describe'] = []
 							win.destroy()
 							whenYouFinishedYourMission.wyfym()
+						if i == 'Checkpoint':
+							for j in x:
+								# nếu dữ liệu trong trường nhập Checkpoint có chứa kí tự, bỏ qua việc lưu dữ liệu vào file csv
+								if (ord(j) >=97 and ord(j) <=122) or (ord(j) >= 65 and ord(j) <= 90):
+									# xóa đi dữ liệu cũ
+									mission_describe['Type'] = []
+									mission_describe['Name'] = []
+									mission_describe['Deadline'] = []
+									mission_describe['Checkpoint'] = []
+									mission_describe['Describe'] = []
+									win.destroy()
+									whenYouFinishedYourMission.wyfym()
 			
 			# tạo dự liệu mới thành dạng ghi vào file
 			my_mission = pd.DataFrame(mission_describe)
