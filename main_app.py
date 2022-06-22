@@ -1,3 +1,4 @@
+from cProfile import label
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
@@ -12,10 +13,11 @@ import pandas as pd
 import random
 
 def App():
+
 	main = Tk()
 
 	# cấu hình của giao diện chính
-	main.geometry("1100x600+150+50")
+	main.geometry("1100x600+0+0")
 
 	# set màu cho background
 	main.config(bg="#404040")
@@ -39,6 +41,15 @@ def App():
 	# tạo frame 1: title
 	title_frame = Frame(main, bg="#404040", width= 1100, height=100)
 	title_frame.grid(column = 1, row = 1, columnspan = 3)
+
+	# set background
+	bg = Image.open("images/anime_bg.jpg")
+	test = ImageTk.PhotoImage(bg)
+
+	label_bg = Label(main, image=test)
+	label_bg.image = test
+
+	label_bg.place(x=0, y=0)
 
 
 	# DÒNG 2
@@ -418,7 +429,7 @@ def App():
 	# hiển thị biến ảnh [New process] ra màn hình
 	np = PhotoImage(file=np_pic.get())
 	new_process = Button(mission_frame, image = np, highlightthickness = 0, bd = 0, command=npEvent, activebackground="#404040")
-	new_process.grid(column=1, row=4, sticky =tk.W, padx=60)
+	new_process.grid(column=1, row=4, sticky =tk.W, padx=60, pady=14)
 
 	# chuột còn ở trên button
 	new_process.bind('<Enter>', npHover)
@@ -473,21 +484,21 @@ def App():
 
 
 	# Dash-line ngăn cách 1 - [của frame 2 - Dòng 1]
-	dash_line1 = Image.open('Resource/dash_line.png')
-	dash_line1 = dash_line1.resize((500, 20), Image.ANTIALIAS)
-	dash1 = ImageTk.PhotoImage(dash_line1)
-	Label(main, image = dash1, highlightthickness = 0, bd = 0).place(x=300, y=93)
+	# dash_line1 = Image.open('Resource/dash_line.png')
+	# dash_line1 = dash_line1.resize((500, 20), Image.ANTIALIAS)
+	# dash1 = ImageTk.PhotoImage(dash_line1)
+	# Label(main, image = dash1, highlightthickness = 0, bd = 0).place(x=300, y=93)
 
 	# Dash-line ngăn cách 2 - [của frame 2 - Dòng 1]
-	dash_line2 = Image.open('Resource/dash_line.png')
-	dash_line2 = dash_line2.resize((500, 20), Image.ANTIALIAS)
-	dash2 = ImageTk.PhotoImage(dash_line2)
-	Label(main, image = dash2, highlightthickness = 0, bd = 0).place(x=300, y=439)
+	# dash_line2 = Image.open('Resource/dash_line.png')
+	# dash_line2 = dash_line2.resize((500, 20), Image.ANTIALIAS)
+	# dash2 = ImageTk.PhotoImage(dash_line2)
+	# Label(main, image = dash2, highlightthickness = 0, bd = 0).place(x=300, y=439)
 
 
 	# TẠO FRAME THỨ 3: Chân ---------------------------------------------------------------------------------------------------------------
-	last_frame = Frame(main, bg = "#404040", width = 800, height = 150)
-	last_frame.grid(column = 1, row = 3, columnspan = 2, sticky = tk.W)
+	# last_frame = Frame(main, bg = "#404040", width = 800, height = 150)
+	# last_frame.grid(column = 1, row = 3, columnspan = 2, sticky = tk.W)
 
 
 
@@ -726,7 +737,6 @@ def App():
 		elif done == True:
 			task_buttons.append(tk.Checkbutton(second_frame, image=but2, selectimage=but1, indicatoron=False, onvalue=False, offvalue=True, highlightthickness = 0, bd = 0, bg=color, activebackground=color, selectcolor=color))
 			buttons_coordinates.append(vitri_y+28)
-
 	
 	colors = ['Resource/Tasks/Black.png', 'Resource/Tasks/Red.png', 'Resource/Tasks/Blue.png', 'Resource/Tasks/Yellow.png']
 	colors_hex = ['#404040', '#F36447', '#558ED5', '#EEC44C']
