@@ -1,83 +1,56 @@
-#Import all the necessary libraries
-from sre_parse import State
 from tkinter import *
-from PIL import Image
-from tkinter import messagebox
-import random
-from datetime import datetime
-import sys
+import tkinter as tk
+from tkinter import ttk
+from tkmagicgrid import *
+import io
+import csv
 
-def dailybox():
-    #Define the tkinter instance
-    win= Toplevel()
-    win.title("Daily reward")
+def show_detail_csv():
+    # Create a root window
+    root = Toplevel()
 
-    #Define the working of the button
-    file="opening_box.gif"
+    # khong cho phóng to màn hình
+    root.resizable(False, False)
 
-    gems = open("time.txt", "r")
-    if gems.read() == "":
-        f = open("time.txt", "w")
-        f.write(f"0\n0")
-        f.close()
+    # tiêu đề của cửa sổ
+    root.title('Details')
+
+    #Defining Background
+    list_frame = Frame(root, bg = "#fff", width = 300, height = 500)
+    list_frame.grid(column = 1, row = 1, sticky = tk.W)
+
+    background = Canvas(list_frame, width=980, height=500, bg="#fff")
+    background.grid(row=1, column=1)
+
+    # tạo cuộn quay cho màn hình nếu dòng [mục đích] dài vượt qua [cấu hình] ban đầu của giao diện
+    scroll_bar = ttk.Scrollbar(list_frame, orient=VERTICAL, command=background.yview)
+    scroll_bar.grid(row=1, column=2, sticky=N+S+W, padx=5)
+
+    background.configure(yscrollcommand=scroll_bar.set)
+
+    second_frame = Frame(background, bg="#fff")
+    background.create_window(0,0, window=second_frame)
+
+    # ADDED
+    second_frame.bind('<Configure>', lambda e: background.configure(scrollregion=background.bbox('all')))
 
 
-    def total_gem():
-        gems = open("time.txt", "r")
-        next(gems)
-        gems = gems.read()
-        if gems == "":
-            return 0
-        return gems
+    # Create a MagicGrid widget
+    grid = MagicGrid(second_frame)
+    grid.pack()
 
-    def my_command():
-        gem = random.randint(25, 50)
-
-        now = datetime.now()
-        hour = now.strftime("%H")
-
-        #open and read the file after the appending:
-        pre_press = open("time.txt", "r")
-        pre_press = pre_press.readline()
-
-        if abs(int(hour) - int(pre_press)) == 0:
-            button1["state"] = DISABLED
-            button2["state"] = DISABLED
-            button3["state"] = DISABLED
-            messagebox.showerror("","Wait for enough 1 hour to claim gift")
-
-        if abs(int(hour) - int(pre_press)) >= 1:
-            if gem >= 49:
-                messagebox.showinfo(title="Reward !", message=f"You unbox {gem} gem, that's insane !!")
+    # Display the contents of some CSV file
+    # (note this is not a particularly efficient viewer)
+    with io.open("my_todolist.csv", "r", newline="", encoding="utf-8") as csv_file:
+        reader = csv.reader(csv_file)
+        parsed_rows = 0
+        for row in reader:
+            if parsed_rows == 0:
+                # Display the first row as a header
+                grid.add_header(*row)
             else:
-                messagebox.showinfo(title="Reward !", message=f"You unbox {gem} gem, nice !!")
+                grid.add_row(*row)
+            parsed_rows += 1
 
-            total_gem_now = int(total_gem()) + gem
-
-            f = open("time.txt", "w")
-            f.write(f"{hour}\n{total_gem_now}")
-            f.close()
-
-            button1["state"] = NORMAL
-            button2["state"] = NORMAL
-            button3["state"] = NORMAL
-    #Import the image using PhotoImage function
-    click_btn= PhotoImage(file='images/box_reward.png')
-
-    #Let us create a label for button event
-    img_label= Label(image=click_btn)
-
-    #Let us create a dummy button and pass the image
-    button1= Button(win, image=click_btn,command= my_command,borderwidth=0)
-    button1.grid(column=1, row = 1)
-
-    button2= Button(win, image=click_btn,command= my_command,borderwidth=0)
-    button2.grid(column=2, row = 1)
-
-    button3= Button(win, image=click_btn,command= my_command,borderwidth=0)
-    button3.grid(column=3, row = 1)
-
-    text= Label(win, text= "Choose 1 for random gem", font=("Arial",20))
-    text.grid(column = 2, row = 2)
-
-    win.mainloop()
+    # Start Tk's event loop
+    root.mainloop()
