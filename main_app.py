@@ -1,4 +1,3 @@
-from cProfile import label
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
@@ -10,14 +9,13 @@ import show_csv
 import done_tasks
 from game_method import GAME
 import pandas as pd
-import random
 
 def App():
 
 	main = Tk()
 
 	# cấu hình của giao diện chính
-	main.geometry("1100x600+0+0")
+	main.geometry("1100x600+150+50")
 
 	# set màu cho background
 	main.config(bg="#404040")
@@ -28,6 +26,9 @@ def App():
 	# tiêu đề của cửa sổ
 	main.title('To-do-list')
 
+	# logo app
+	main.iconbitmap("images/logo.ico")
+
 	# khai báo file csv mang dữ liệu chính
 	my_to_do_list = pd.read_csv('my_todolist.csv')
 
@@ -35,30 +36,29 @@ def App():
 	your_experiments = pd.read_csv('your_experiments.csv')
 	level_file = pd.read_csv('level.csv')
 
+	# set background
+	bg = Image.open("images/anime_bg.jpg")
+	bg_pic = ImageTk.PhotoImage(bg)
+	
+	label_bg = Label(main, image=bg_pic)
+	label_bg.image = bg_pic
+
+	label_bg.place(x=0, y=0)
 
 	# DÒNG 1
 
 	# tạo frame 1: title
-	title_frame = Frame(main, bg="#404040", width= 1100, height=100)
-	title_frame.grid(column = 1, row = 1, columnspan = 3)
-
-	# set background
-	bg = Image.open("images/anime_bg.jpg")
-	test = ImageTk.PhotoImage(bg)
-
-	label_bg = Label(main, image=test)
-	label_bg.image = test
-
-	label_bg.place(x=0, y=0)
-
+	title_frame = Frame(main, bg="#fff", width= 0, height=100)
+	title_frame.grid(column = 1, row = 0, columnspan = 3, sticky=tk.E)
 
 	# DÒNG 2
 	# tạo FRAME THỨ 1: Tạo report ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 
 	report_frame = Frame(main, bg="white", width = 300, height = 350)
-	report_frame.grid(column = 1, row = 2, sticky = tk.W)
+	report_frame.grid(column = 1, row = 1, sticky = tk.W)
 
-		# các biến lưu lại thông tin
+
+	# các biến lưu lại thông tin
 
 	# biến lưu lại [Level] ------------------
 	number_of_level = StringVar()
@@ -220,6 +220,7 @@ def App():
 			dailyBox_button.image = dailyBox
 
 	def dailyBoxEvent():
+		main.destroy()
 		timer.dailybox()
 
 
@@ -297,6 +298,7 @@ def App():
 	processmedal_text1 = Label(report_frame, text = number_of_process.get(), font = ("Calibri", 20, 'bold'), highlightthickness = 0, bd = 0, bg="#fff", fg="#404040")
 	processmedal_text1.place(x=60, y=110)
 
+
 	# Red cube
 	photo_red = Image.open('Resource/Red.png')
 	photo_red = photo_red.resize((20, 20), Image.ANTIALIAS)
@@ -371,13 +373,13 @@ def App():
 
 
 	# tạo FRAME THỨ 2: Tạo to-do-list mới ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
-	mission_frame = Frame(main, bg = "#404040", width = 500, height = 350)
-	mission_frame.grid(column = 2, row = 2, sticky = tk.W)
+	mission_frame = Frame(main, bg = "#404040", width = 600, height = 350)
+	mission_frame.grid(column = 2, row = 1, sticky = tk.W)
 
 	# MAIN 1: Manage and check your missions ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 	# MAIN TITLE: title chính ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-	Label(mission_frame, text="Manage and check your missions", font=('Calibri', 24), bg="#404040", fg="#fff", anchor=N).grid(column=1, row=1)
+	Label(mission_frame, text="Manage and check your missions", font=('Calibri', 24), bg="#404040", fg="#fff", anchor=N, width=31).grid(column=1, row=1)
 	# SUB TITLE: title phụ  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 	Label(mission_frame, text="there are so much things you have done", font=('Calibri', 14), bg="#404040", fg="#fff", anchor=N).grid(column=1, row=2)
 
@@ -386,7 +388,7 @@ def App():
 	photo = Image.open('Resource/Cup.png')
 	photo = photo.resize((160, 160), Image.ANTIALIAS)
 	cup = ImageTk.PhotoImage(photo)
-	Label(mission_frame, image = cup, highlightthickness = 0, bd = 0).grid(column=1, row=3, pady=20)
+	Label(mission_frame, image = cup, highlightthickness = 0, bd = 0).grid(column=1, row=3, pady=22)
 
 
 	# MAIN BUTTONS: hai button chính ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -429,7 +431,7 @@ def App():
 	# hiển thị biến ảnh [New process] ra màn hình
 	np = PhotoImage(file=np_pic.get())
 	new_process = Button(mission_frame, image = np, highlightthickness = 0, bd = 0, command=npEvent, activebackground="#404040")
-	new_process.grid(column=1, row=4, sticky =tk.W, padx=60, pady=14)
+	new_process.grid(column=1, row=4, sticky =tk.W, padx=80)
 
 	# chuột còn ở trên button
 	new_process.bind('<Enter>', npHover)
@@ -475,7 +477,7 @@ def App():
 	# hiển thị biến ảnh [Check what you have done] ra màn hình
 	cwyhd = PhotoImage(file=cwyhd_pic.get())
 	check_what_you_have_done = Button(mission_frame, image = cwyhd, highlightthickness = 0, bd = 0, command=cwyhdEvent, activebackground="#404040")
-	check_what_you_have_done.grid(column=1, row=4, sticky=tk.E, padx=60)
+	check_what_you_have_done.grid(column=1, row=4, sticky=tk.E, padx=80)
 
 	# chuột còn ở trên button
 	check_what_you_have_done.bind('<Enter>', cwyhdHover)
@@ -483,35 +485,37 @@ def App():
 	check_what_you_have_done.bind('<Leave>', cwyhdHover)
 
 
-	# Dash-line ngăn cách 1 - [của frame 2 - Dòng 1]
-	# dash_line1 = Image.open('Resource/dash_line.png')
-	# dash_line1 = dash_line1.resize((500, 20), Image.ANTIALIAS)
-	# dash1 = ImageTk.PhotoImage(dash_line1)
-	# Label(main, image = dash1, highlightthickness = 0, bd = 0).place(x=300, y=93)
+	#Dash-line ngăn cách 1 - [của frame 2 - Dòng 1]
+	dash_line1 = Image.open('Resource/dash_line1.png')
+	dash_line1 = dash_line1.resize((505, 14), Image.ANTIALIAS)
+	dash1 = ImageTk.PhotoImage(dash_line1)
+	Label(main, image = dash1, highlightthickness = 0, bd = 0).place(x=300, y=100)
 
-	# Dash-line ngăn cách 2 - [của frame 2 - Dòng 1]
-	# dash_line2 = Image.open('Resource/dash_line.png')
-	# dash_line2 = dash_line2.resize((500, 20), Image.ANTIALIAS)
-	# dash2 = ImageTk.PhotoImage(dash_line2)
-	# Label(main, image = dash2, highlightthickness = 0, bd = 0).place(x=300, y=439)
+	#Dash-line ngăn cách 2 - [của frame 2 - Dòng 1]
+	dash_line2 = Image.open('Resource/dash_line2.png')
+	dash_line2 = dash_line2.resize((505, 14), Image.ANTIALIAS)
+	dash2 = ImageTk.PhotoImage(dash_line2)
+	Label(main, image = dash2, highlightthickness = 0, bd = 0).place(x=300, y=439)
 
 
 	# TẠO FRAME THỨ 3: Chân ---------------------------------------------------------------------------------------------------------------
-	# last_frame = Frame(main, bg = "#404040", width = 800, height = 150)
-	# last_frame.grid(column = 1, row = 3, columnspan = 2, sticky = tk.W)
+	last_frame = Frame(main, bg = "#404040", width = 0, height = 150)
+	last_frame.grid(column = 1, row = 2, columnspan = 2, sticky = tk.W)
 
+	
 
+	#Scrollbar
 
 	#Defining Background
-	list_frame = Frame(main, bg = "#fff", width = 300, height = 500)
-	list_frame.grid(column = 3, row = 2, rowspan = 2, sticky = tk.W)
+	list_frame = Frame(main, bg = "#fff", width = 250, height = 500)
+	list_frame.grid(column = 3, row = 1, rowspan = 2, sticky = tk.W)
 
 	background = Canvas(list_frame, width=280, height=500, bg="#fff")
 	background.grid(row=1, column=1)
 
 	# tạo cuộn quay cho màn hình nếu dòng [mục đích] dài vượt qua [cấu hình] ban đầu của giao diện
-	scroll_bar = ttk.Scrollbar(list_frame, orient=VERTICAL, command=background.yview)
-	scroll_bar.grid(row=1, column=1, sticky=tk.E, padx=10)
+	scroll_bar = Scrollbar(list_frame, orient=VERTICAL, command=background.yview)
+	scroll_bar.grid(row=1, column=2, sticky=N+S+W)
 
 	background.configure(yscrollcommand=scroll_bar.set)
 
@@ -555,7 +559,7 @@ def App():
 	dts_pic = StringVar()
 	dts_pic.set('Resource/Buttons/Button_details1.png')
 
-	# hiển thị biến ảnh [New process] ra màn hình
+	# hiển thị biến ảnh [Details] ra màn hình
 	dts = PhotoImage(file=dts_pic.get())
 	details = Button(second_frame, image = dts, highlightthickness = 0, bd = 0, command=dtsEvent, activebackground="#fff")
 	details.place(x=190, y=10)
