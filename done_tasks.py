@@ -36,7 +36,7 @@ def taskHaveDone():
 
 	# tạo cuộn quay cho màn hình nếu dòng [mục đích] dài vượt qua [cấu hình] ban đầu của giao diện
 	scroll_bar = ttk.Scrollbar(list_frame, orient=VERTICAL, command=background.yview)
-	scroll_bar.grid(row=1, column=1, sticky=tk.E, padx=10)
+	scroll_bar.grid(row=1, column=1, sticky=N+S+W)
 
 	background.configure(yscrollcommand=scroll_bar.set)
 
